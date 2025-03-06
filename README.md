@@ -1,0 +1,2 @@
+**GestMoto** est une plateforme de gestion des ventes de motos.
+La plateforme devrait inclure des fonctionnalités permettant une meilleure gestion des ventes de motos. Ainsi, le propriétaire d’une entreprise de vente de motos pourra avoir un œil sur le travail effectué par ses employés et collaborateurs, et ce, depuis son petit écran.
