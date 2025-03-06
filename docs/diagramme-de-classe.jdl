@@ -1,0 +1,93 @@
+entity User{
+  nom String
+  prenom String
+  telephone String
+  email String
+  password String
+  adresse String
+}
+
+entity Poste{
+  libelle String
+}
+
+entity Employe{
+  salaire Integer
+}
+
+entity Client{
+  id String
+  profession String
+  ville String
+  province String
+}
+
+entity Fournisseur{
+  id String
+}
+
+entity Facture{
+  date Date
+}
+
+entity Entreprise{
+  denomination String
+  adresse String
+  logoUrl String
+  telephone String
+  ifu String
+  rccm String
+}
+
+entity Modele{
+  libelle String
+}
+
+entity Genre{
+  libelle String
+}
+
+entity Moto{
+  libelle String
+  prix Integer
+  annee Date
+  marque String
+  type String
+  etat String
+  couleur String
+  immatriculation String
+  numeroSerie String
+  nbPlace String
+  sourceEnergie String
+  capacite String
+  carosserie String
+  poidsVide String
+  contactPersonneAPrevenir String
+  chargeUtile String
+}
+
+relationship OneToMany{
+  Poste to Employe{poste}
+  Genre to Moto{genre}
+  Modele to Moto{modele}
+  Fournisseur to Moto{fournisseur}
+  Entreprise to Moto{entreprise}
+  Entreprise to Facture{entreprise}
+  Entreprise to User{entreprise}
+  Entreprise to Poste{entreprise}
+  Entreprise to Employe{entreprise}
+  Entreprise to Client{entreprise}
+  Entreprise to Fournisseur{entreprise}
+  Entreprise to Genre{entreprise}
+  Entreprise to Modele{entreprise}
+}
+
+relationship OneToOne{
+  User to Client
+  User to Fournisseur
+  User to Employe
+  Facture to Moto
+  Facture to Client
+}
+
+
