@@ -23,6 +23,6 @@ public class GmFournisseur {
     private GmEntreprise entreprise;
 
     @ManyToOne
-    @JoinColumn(name = "user")
-    private GmUser user;
+    @JoinColumn(name = "utilisateur")
+    private GmUser utilisateur;
 }
