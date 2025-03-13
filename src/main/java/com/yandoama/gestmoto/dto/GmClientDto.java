@@ -1,11 +1,14 @@
 package com.yandoama.gestmoto.dto;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class GmClientDto {
+public class GmClientDto extends AbstractInfoDto{
 
     private String id;
 
@@ -15,7 +18,7 @@ public class GmClientDto {
 
     private String province;
 
-    private String idUser;
+    private String idUtilisateur;
 
     private GmUserDto userDto;
 

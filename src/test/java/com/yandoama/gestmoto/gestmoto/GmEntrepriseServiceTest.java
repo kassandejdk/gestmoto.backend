@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -64,14 +65,18 @@ public class GmEntrepriseServiceTest {
         dto.setDenomination("Test Entreprise");
         dto.setIfu("1234567890");
         dto.setRccm("1234567890");
-
+        dto.setAdresse("Bobo-Dioulasso, secteur 29");
+        dto.setTelephone("+22674415998");
+        dto.setLogoUrl("https://logo.url");
 
         mvc.perform(post(GmConstants.URLS.BASE_URL + GmConstants.URLS.ENTREPRISE)
                         .content(MAPPER.writeValueAsBytes(dto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.statut").isNotEmpty());
     }
 
 }

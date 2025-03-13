@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class GmMotoDto {
+public class GmMotoDto extends AbstractInfoDto{
 
     private String id;
 

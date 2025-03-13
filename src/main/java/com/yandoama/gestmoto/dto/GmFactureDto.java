@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class GmFactureDto {
+public class GmFactureDto extends AbstractInfoDto{
     private String id;
 
     private LocalDate date;

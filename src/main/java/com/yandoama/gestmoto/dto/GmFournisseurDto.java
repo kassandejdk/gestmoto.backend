@@ -5,13 +5,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class GmFournisseurDto {
+public class GmFournisseurDto extends AbstractInfoDto{
 
     private String id;
 
     private String idEntreprise;
 
-    private String idUser;
+    private String idUtilisateur;
 
     private GmUserDto user;
 }
