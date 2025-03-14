@@ -11,7 +11,8 @@ public interface GmFournisseurRepository extends JpaRepository<GmFournisseur, St
     /**
      * Get suppliers informations.
      * @param eStatut
+     * @param idEntreprise
      * @return List of Supplier
      */
-    List<GmFournisseur> findByStatut(EStatut eStatut);
+    List<GmFournisseur> findByStatutAndIdEntreprise(EStatut eStatut, String idEntreprise);
 }

@@ -12,5 +12,5 @@ public interface GmEmployeRepository extends JpaRepository<GmEmploye, String> {
      * @param eStatut
      * @return list of employees
      */
-    List<GmEmploye> findByStatut(EStatut eStatut);
+    List<GmEmploye> findByStatutAndIdEntreprise(EStatut eStatut, String idEntreprise);
 }

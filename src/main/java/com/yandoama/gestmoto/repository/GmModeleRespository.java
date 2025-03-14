@@ -1,6 +1,5 @@
 package com.yandoama.gestmoto.repository;
 
-import com.yandoama.gestmoto.entity.GmGenre;
 import com.yandoama.gestmoto.entity.GmModele;
 import com.yandoama.gestmoto.entity.enums.EStatut;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,7 +33,8 @@ public interface GmModeleRespository extends JpaRepository<GmModele, String> {
     /**
      * Get information.
      * @param eStatut
+     * @param idEntreprise
      * @return List
      */
-    List<GmModele> findByStatut(EStatut eStatut);
+    List<GmModele> findByStatutAndIdEntreprise(EStatut eStatut, String idEntreprise);
 }

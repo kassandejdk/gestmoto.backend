@@ -3,17 +3,21 @@ package com.yandoama.gestmoto.service;
 import com.yandoama.gestmoto.dto.GmClientDto;
 import com.yandoama.gestmoto.dto.GmEmployeDto;
 import com.yandoama.gestmoto.dto.GmEntrepriseDto;
+import com.yandoama.gestmoto.dto.GmFactureDto;
 import com.yandoama.gestmoto.dto.GmFournisseurDto;
 import com.yandoama.gestmoto.dto.GmGenreDto;
 import com.yandoama.gestmoto.dto.GmModeleDto;
+import com.yandoama.gestmoto.dto.GmMotoDto;
 import com.yandoama.gestmoto.dto.GmPosteDto;
 import com.yandoama.gestmoto.dto.GmUserDto;
 import com.yandoama.gestmoto.entity.GmClient;
 import com.yandoama.gestmoto.entity.GmEmploye;
 import com.yandoama.gestmoto.entity.GmEntreprise;
+import com.yandoama.gestmoto.entity.GmFacture;
 import com.yandoama.gestmoto.entity.GmFournisseur;
 import com.yandoama.gestmoto.entity.GmGenre;
 import com.yandoama.gestmoto.entity.GmModele;
+import com.yandoama.gestmoto.entity.GmMoto;
 import com.yandoama.gestmoto.entity.GmPoste;
 import com.yandoama.gestmoto.entity.GmUser;
 import com.yandoama.gestmoto.entity.enums.EStatut;
@@ -21,9 +25,11 @@ import com.yandoama.gestmoto.mapstruct.GmMapper;
 import com.yandoama.gestmoto.repository.GmClientRepository;
 import com.yandoama.gestmoto.repository.GmEmployeRepository;
 import com.yandoama.gestmoto.repository.GmEntrepriseRepository;
+import com.yandoama.gestmoto.repository.GmFactureRepository;
 import com.yandoama.gestmoto.repository.GmFournisseurRepository;
 import com.yandoama.gestmoto.repository.GmGenreRepository;
 import com.yandoama.gestmoto.repository.GmModeleRespository;
+import com.yandoama.gestmoto.repository.GmMotoRepository;
 import com.yandoama.gestmoto.repository.GmPosteRepository;
 import com.yandoama.gestmoto.repository.GmUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +56,8 @@ public class GmServiceMetier {
     private final GmGenreRepository genreRepository;
     private final GmFournisseurRepository fournisseurRepository;
     private final GmPosteRepository posteRepository;
+    private final GmMotoRepository motoRepository;
+    private final GmFactureRepository factureRepository;
 
     /**
      * Permet de retourner toutes les entreprises.
@@ -145,8 +153,8 @@ public class GmServiceMetier {
      *
      * @return List of GmUserDto
      */
-    public List<GmUserDto> doGetUsers() {
-        List<GmUser> users = this.userRepository.findByStatut(EStatut.ACTIF);
+    public List<GmUserDto> doGetUsers(final String idEntreprise) {
+        List<GmUser> users = this.userRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
         return users.stream().map(mapper::maps).collect(Collectors.toList());
 
     }
@@ -234,11 +242,11 @@ public class GmServiceMetier {
     /**
      * Return a set of customer.
      *
-     * @param id
+     * @param idEntreprise
      * @return GmClientDto
      */
-    public List<GmClientDto> doGetClients(final String id) {
-        List<GmClient> clients = this.clientRepository.findByStatut(EStatut.ACTIF);
+    public List<GmClientDto> doGetClients(final String idEntreprise) {
+        List<GmClient> clients = this.clientRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
         return clients.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -250,15 +258,17 @@ public class GmServiceMetier {
      */
     public GmClientDto doPostClient(final GmClientDto dto) {
         this.checkDuplicateUser(null, dto.getUserDto());
+        GmUserDto user = this.doPostUser(dto.getUserDto());
         GmClient client = this.mapper.maps(dto);
         client.setId(UUID.randomUUID().toString());
         client.setStatut(EStatut.ACTIF);
+        client.setUtilisateur(this.mapper.maps(user));
         client = this.clientRepository.save(client);
         return this.mapper.maps(client);
     }
 
     /**
-     * Udate customer information.
+     * Update customer's information.
      *
      * @param id
      * @param dto
@@ -266,6 +276,7 @@ public class GmServiceMetier {
      */
     public GmClientDto doPutClient(final String id, final GmClientDto dto) {
         this.checkDuplicateUser(id, dto.getUserDto());
+        this.doPutUser(dto.getIdUtilisateur(), dto.getUserDto());
         GmClient client = this.mapper.maps(dto);
         client.setId(id);
         client = this.clientRepository.save(client);
@@ -301,8 +312,8 @@ public class GmServiceMetier {
      *
      * @return list of employe DTO
      */
-    public List<GmEmployeDto> doGetEmployes() {
-        List<GmEmploye> employes = this.employeRepository.findByStatut(EStatut.ACTIF);
+    public List<GmEmployeDto> doGetEmployes(final String idEntreprise) {
+        List<GmEmploye> employes = this.employeRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
         return employes.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -314,9 +325,11 @@ public class GmServiceMetier {
      */
     public GmEmployeDto doPostEmploye(final GmEmployeDto dto) {
         this.checkDuplicateUser(null, dto.getUserDto());
+        GmUserDto user = this.doPostUser(dto.getUserDto());
         GmEmploye employe = this.mapper.maps(dto);
         employe.setId(UUID.randomUUID().toString());
         employe.setStatut(EStatut.ACTIF);
+        employe.setUtilisateur(this.mapper.maps(user));
         employe = this.employeRepository.save(employe);
         return this.mapper.maps(employe);
     }
@@ -330,6 +343,7 @@ public class GmServiceMetier {
      */
     public GmEmployeDto doPutEmploye(final String id, final GmEmployeDto dto) {
         this.checkDuplicateUser(id, dto.getUserDto());
+        this.doPutUser(dto.getIdUtilisateur(), dto.getUserDto());
         GmEmploye employe = this.mapper.maps(dto);
         employe.setId(id);
         employe = this.employeRepository.save(employe);
@@ -389,8 +403,8 @@ public class GmServiceMetier {
      *
      * @return a list of DTO
      */
-    public List<GmGenreDto> doGetGenres() {
-        List<GmGenre> genres = this.genreRepository.findByStatut(EStatut.ACTIF);
+    public List<GmGenreDto> doGetGenres(final String idEntreprise) {
+        List<GmGenre> genres = this.genreRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
         return genres.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -454,8 +468,8 @@ public class GmServiceMetier {
      *
      * @return List of model
      */
-    public List<GmModeleDto> doGetModeles() {
-        List<GmModele> modeles = this.modeleRespository.findByStatut(EStatut.ACTIF);
+    public List<GmModeleDto> doGetModeles(final String idEntreprise) {
+        List<GmModele> modeles = this.modeleRespository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
         return modeles.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -514,8 +528,9 @@ public class GmServiceMetier {
     /**
      * Get all suppliers.
      */
-    public List<GmFournisseurDto> doGetFournisseurs() {
-        List<GmFournisseur> fournisseurs = this.fournisseurRepository.findAll();
+    public List<GmFournisseurDto> doGetFournisseurs(final String idEntreprise) {
+        List<GmFournisseur> fournisseurs = this.fournisseurRepository.findByStatutAndIdEntreprise(EStatut.ACTIF,
+                idEntreprise);
         return fournisseurs.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -526,8 +541,11 @@ public class GmServiceMetier {
      */
     public GmFournisseurDto doPostFournisseur(final GmFournisseurDto dto) {
         this.checkDuplicateUser(null, dto.getUser());
+        GmUserDto user = this.doPostUser(dto.getUser());
         GmFournisseur fournisseur = this.mapper.maps(dto);
         fournisseur.setId(UUID.randomUUID().toString());
+        fournisseur.setUtilisateur(this.mapper.maps(user));
+        fournisseur.setStatut(EStatut.ACTIF);
         fournisseur = this.fournisseurRepository.save(fournisseur);
         return this.mapper.maps(fournisseur);
     }
@@ -587,8 +605,8 @@ public class GmServiceMetier {
      *
      * @return
      */
-    public List<GmPosteDto> doGetPostes() {
-        List<GmPoste> postes = this.posteRepository.findAll();
+    public List<GmPosteDto> doGetPostes(final String idEntreprise) {
+        List<GmPoste> postes = this.posteRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
         return postes.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -629,6 +647,151 @@ public class GmServiceMetier {
         this.posteRepository.findById(id).ifPresent((poste) -> {
             poste.setStatut(EStatut.SUPPRIME);
             this.posteRepository.save(poste);
+        });
+    }
+
+    /**
+     * Verify existence of motorbike's information.
+     *
+     * @param id
+     * @param dto
+     */
+    public void checkDuplicateMoto(final String id, final GmMotoDto dto) {
+        if (this.motoRepository.checkDuplicateMoto(id, dto.getNumeroSerie(), EStatut.ACTIF, dto.getIdEntreprise())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Une moto existe deja avec cet numero de serie");
+        }
+    }
+
+    /**
+     * Get a motorbike information.
+     *
+     * @param id
+     * @return GmMotoDto
+     */
+    public GmMotoDto doGetMotoById(final String id) {
+        GmMoto moto = this.motoRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "La moto n'existe pas."));
+        return this.mapper.maps(moto);
+    }
+
+    /**
+     * Get a list of motorbike's informations.
+     *
+     * @param idEntreprise
+     * @return List of motorbike
+     */
+    public List<GmMotoDto> doGetMotos(final String idEntreprise) {
+        List<GmMoto> motos = this.motoRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        return motos.stream().map(mapper::maps).collect(Collectors.toList());
+    }
+
+    /**
+     * Save a motorbike's information.
+     *
+     * @param dto
+     * @return a Moto DTO
+     */
+    public GmMotoDto doPostMoto(final GmMotoDto dto) {
+        this.checkDuplicateMoto(null, dto);
+        GmMoto moto = this.mapper.maps(dto);
+        moto.setId(UUID.randomUUID().toString());
+        moto.setStatut(EStatut.ACTIF);
+        moto = this.motoRepository.save(moto);
+        return this.mapper.maps(moto);
+    }
+
+    /**
+     * Update motorbike's information.
+     *
+     * @param id
+     * @param dto
+     * @return a Moto DTO
+     */
+    public GmMotoDto doUpdateMoto(final String id, final GmMotoDto dto) {
+        this.checkDuplicateMoto(id, dto);
+        GmMoto moto = this.mapper.maps(dto);
+        moto.setId(id);
+        moto = this.motoRepository.save(moto);
+        return this.mapper.maps(moto);
+    }
+
+    /**
+     * Suppress motorbike.
+     *
+     * @param id
+     */
+    public void doDeleteMoto(final String id) {
+        this.motoRepository.findById(id).ifPresent((entreprise) -> {
+            entreprise.setStatut(EStatut.SUPPRIME);
+            this.motoRepository.save(entreprise);
+        });
+    }
+
+    /**
+     * Get an invoice information.
+     *
+     * @param id
+     * @return Invoice DTO
+     */
+    public GmFactureDto doGetFactureById(final String id) {
+        GmFacture facture = this.factureRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cette facture n'existe pas."));
+        return this.mapper.maps(facture);
+    }
+
+    /**
+     * Get invoices informations.
+     *
+     * @param idEntreprise
+     * @return List of invoice.
+     */
+    public List<GmFactureDto> doGetFactures(final String idEntreprise) {
+        List<GmFacture> factures = this.factureRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        return factures.stream().map(mapper::maps).collect(Collectors.toList());
+    }
+
+    /**
+     * Save a invoice information.
+     *
+     * @param dto
+     * @return Invoice DTO
+     */
+    public GmFactureDto doPostFacture(final GmFactureDto dto) {
+        GmFacture facture = this.mapper.maps(dto);
+        if (dto.getIdClient() == null) {
+            GmClientDto client = this.doPostClient(dto.getClient());
+            facture.setClient(this.mapper.maps(client));
+        }
+        facture.setId(UUID.randomUUID().toString());
+        facture.setStatut(EStatut.ACTIF);
+        facture = this.factureRepository.save(facture);
+        return this.mapper.maps(facture);
+
+    }
+
+    /**
+     * Update invoice information.
+     *
+     * @param id
+     * @param dto
+     * @return Invoice DTO
+     */
+    public GmFactureDto doUpdateFacture(final String id, final GmFactureDto dto) {
+        GmFacture facture = this.mapper.maps(dto);
+        facture.setId(id);
+        facture = this.factureRepository.save(facture);
+        return this.mapper.maps(facture);
+    }
+
+    /**
+     * Suppress an invoice information.
+     *
+     * @param id
+     */
+    public void doDeleteFacture(final String id) {
+        this.factureRepository.findById(id).ifPresent((facture) -> {
+            facture.setStatut(EStatut.SUPPRIME);
+            this.factureRepository.save(facture);
         });
     }
 

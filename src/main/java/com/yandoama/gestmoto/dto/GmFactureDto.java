@@ -2,14 +2,16 @@ package com.yandoama.gestmoto.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class GmFactureDto extends AbstractInfoDto{
+public class GmFactureDto extends AbstractInfoDto {
     private String id;
 
     private LocalDate date;
@@ -25,6 +27,6 @@ public class GmFactureDto extends AbstractInfoDto{
     private String idMoto;
 
     @Valid
-    @NotNull(message="La facture doit être liée à une moto.")
+    @NotNull(message = "La facture doit être liée à une moto.")
     private GmMotoDto moto;
 }

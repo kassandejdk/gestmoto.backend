@@ -12,5 +12,5 @@ public interface GmClientRepository extends JpaRepository<GmClient, String> {
      * @param eStatut
      * @return List of customer
      */
-    List<GmClient> findByStatut(EStatut eStatut);
+    List<GmClient> findByStatutAndIdEntreprise(EStatut eStatut, String idEntreprise);
 }

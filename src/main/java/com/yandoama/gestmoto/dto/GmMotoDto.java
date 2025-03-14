@@ -45,8 +45,6 @@ public class GmMotoDto extends AbstractInfoDto{
 
     private String idGenre;
 
-    private String idMoto;
-
     private String idModele;
 
     private String idEntreprise;

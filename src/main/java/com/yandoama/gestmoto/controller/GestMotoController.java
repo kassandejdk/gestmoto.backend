@@ -1,6 +1,8 @@
 package com.yandoama.gestmoto.controller;
 
+import com.yandoama.gestmoto.dto.GmClientDto;
 import com.yandoama.gestmoto.dto.GmEntrepriseDto;
+import com.yandoama.gestmoto.dto.GmMotoDto;
 import com.yandoama.gestmoto.service.GmServiceMetier;
 import com.yandoama.gestmoto.utils.GmConstants;
 import lombok.RequiredArgsConstructor;
@@ -85,6 +87,127 @@ public class GestMotoController {
     public ResponseEntity<String> deleteEntreprise(@PathVariable final String id) {
         this.serviceMetier.doDeleteEnterprise(id);
         return new ResponseEntity<>("Entreprise supprimée avec succès", HttpStatus.OK);
+    }
+
+
+    /**
+     * Return a set instance of an motorbike.
+     *
+     * @return a list of motorbike
+     */
+    @GetMapping(GmConstants.URLS.MOTO + "/{id}")
+    public ResponseEntity<List<GmMotoDto>> getMotos(final String id) {
+        List<GmMotoDto> motos = this.serviceMetier.doGetMotos(id);
+        return new ResponseEntity<>(motos, HttpStatus.OK);
+    }
+
+    /**
+     * Permit to return an instance of motorbike.
+     *
+     * @param id
+     * @return an motorbike
+     */
+    @GetMapping(GmConstants.URLS.MOTO + "/{id}")
+    public ResponseEntity<GmMotoDto> getMoto(@PathVariable final String id) {
+        GmMotoDto moto = this.serviceMetier.doGetMotoById(id);
+        return new ResponseEntity<>(moto, HttpStatus.OK);
+    }
+
+    /**
+     * Permit to save an motorbike's information.
+     *
+     * @param dto
+     * @return a sentence
+     */
+    @PostMapping(GmConstants.URLS.MOTO)
+    public ResponseEntity<GmMotoDto> postMoto(@RequestBody final GmMotoDto dto) {
+        GmMotoDto moto= this.serviceMetier.doPostMoto(dto);
+        return new ResponseEntity<>(moto, HttpStatus.OK);
+    }
+
+    /**
+     * Permit to modify motorbike's information.
+     *
+     * @param id
+     * @param dto
+     * @return a string
+     */
+    @PutMapping(GmConstants.URLS.MOTO)
+    public ResponseEntity<String> updateMoto(@PathVariable final String id, @RequestBody final GmMotoDto dto) {
+        this.serviceMetier.doUpdateMoto(id, dto);
+        return new ResponseEntity<>("Moto modifiée avec succès", HttpStatus.OK);
+    }
+
+    /**
+     * Permit to delete an motorbike.
+     *
+     * @param id
+     * @return String
+     */
+    @DeleteMapping(GmConstants.URLS.MOTO)
+    public ResponseEntity<String> deleteMoto(@PathVariable final String id) {
+        this.serviceMetier.doDeleteMoto(id);
+        return new ResponseEntity<>("Moto supprimée avec succès", HttpStatus.OK);
+    }
+
+    /**
+     * Return a set instance of an customer.
+     *
+     * @return a list of customer
+     */
+    @GetMapping(GmConstants.URLS.CLIENT + "/{id}")
+    public ResponseEntity<List<GmClientDto>> getClients(final String id) {
+        List<GmClientDto> clients = this.serviceMetier.doGetClients(id);
+        return new ResponseEntity<>(clients, HttpStatus.OK);
+    }
+
+    /**
+     * Permit to return an instance of customer.
+     *
+     * @param id
+     * @return an customer
+     */
+    @GetMapping(GmConstants.URLS.CLIENT + "/{id}")
+    public ResponseEntity<GmClientDto> getClient(@PathVariable final String id) {
+        GmClientDto client = this.serviceMetier.doGetClientById(id);
+        return new ResponseEntity<>(client, HttpStatus.OK);
+    }
+
+    /**
+     * Permit to save an customer's information.
+     *
+     * @param dto
+     * @return a sentence
+     */
+    @PostMapping(GmConstants.URLS.CLIENT)
+    public ResponseEntity<GmClientDto> postClient(@RequestBody final GmClientDto dto) {
+        GmClientDto client= this.serviceMetier.doPostClient(dto);
+        return new ResponseEntity<>(client, HttpStatus.OK);
+    }
+
+    /**
+     * Permit to modify customer's information.
+     *
+     * @param id
+     * @param dto
+     * @return a string
+     */
+    @PutMapping(GmConstants.URLS.CLIENT)
+    public ResponseEntity<String> updateClient(@PathVariable final String id, @RequestBody final GmClientDto dto) {
+        this.serviceMetier.doPutClient(id, dto);
+        return new ResponseEntity<>("Client modifié avec succès", HttpStatus.OK);
+    }
+
+    /**
+     * Permit to delete an customer.
+     *
+     * @param id
+     * @return String
+     */
+    @DeleteMapping(GmConstants.URLS.CLIENT)
+    public ResponseEntity<String> deleteClient(@PathVariable final String id) {
+        this.serviceMetier.doDeleteClient(id);
+        return new ResponseEntity<>("Client supprimé avec succès", HttpStatus.OK);
     }
 
 

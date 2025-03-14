@@ -15,7 +15,7 @@ public interface GmUserRepository extends JpaRepository<GmUser, String> {
      * @param eStatut
      * @return List of User
      */
-    List<GmUser> findByStatut(EStatut eStatut);
+    List<GmUser> findByStatutAndIdEntreprise(EStatut eStatut, String idEntreprise);
 
     /**
      * Requete JPQL pour eviter les doublons.
