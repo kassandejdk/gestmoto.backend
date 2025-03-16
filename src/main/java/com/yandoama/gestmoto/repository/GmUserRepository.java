@@ -1,5 +1,6 @@
 package com.yandoama.gestmoto.repository;
 
+import com.yandoama.gestmoto.entity.GmEntreprise;
 import com.yandoama.gestmoto.entity.GmUser;
 import com.yandoama.gestmoto.entity.enums.EStatut;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,7 @@ public interface GmUserRepository extends JpaRepository<GmUser, String> {
      * @param eStatut
      * @return List of User
      */
-    List<GmUser> findByStatutAndIdEntreprise(EStatut eStatut, String idEntreprise);
+    List<GmUser> findByStatutAndEntrepriseId(EStatut eStatut, String idEntreprise);
 
     /**
      * Requete JPQL pour eviter les doublons.

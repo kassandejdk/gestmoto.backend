@@ -12,5 +12,5 @@ public interface GmFactureRepository extends JpaRepository<GmFacture, String> {
      * @param idEntreprise
      * @return List of Invoice
      */
-    List<GmFacture> findByStatutAndIdEntreprise(EStatut statut, String idEntreprise);
+    List<GmFacture> findByStatutAndEntrepriseId(EStatut statut, String idEntreprise);
 }

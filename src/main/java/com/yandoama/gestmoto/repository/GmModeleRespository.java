@@ -36,5 +36,5 @@ public interface GmModeleRespository extends JpaRepository<GmModele, String> {
      * @param idEntreprise
      * @return List
      */
-    List<GmModele> findByStatutAndIdEntreprise(EStatut eStatut, String idEntreprise);
+    List<GmModele> findByStatutAndEntrepriseId(EStatut eStatut, String idEntreprise);
 }

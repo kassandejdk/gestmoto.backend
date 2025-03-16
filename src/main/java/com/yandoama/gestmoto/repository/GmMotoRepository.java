@@ -24,8 +24,8 @@ public interface GmMotoRepository extends JpaRepository<GmMoto, String> {
                     + " WHERE g.entreprise.id = :idEntreprise "
                     + " AND g.statut = :statut"
                     + " AND ("
-                    + "     (:id IS NULL AND g.numero_serie = :numeroSerie)"
-                    + "     OR (:id IS NOT NULL AND :id != g.id AND g.numero_serie = :numero_serie)"
+                    + "     (:id IS NULL AND g.numeroSerie = :numeroSerie)"
+                    + "     OR (:id IS NOT NULL AND :id != g.id AND g.numeroSerie = :numeroSerie)"
                     + " )"
     )
     Boolean checkDuplicateMoto(@Param("id") String id, @Param("numeroSerie") String numeroSerie,
@@ -38,5 +38,5 @@ public interface GmMotoRepository extends JpaRepository<GmMoto, String> {
      * @param idEntreprise
      * @return List of motorbike
      */
-    List<GmMoto> findByStatutAndIdEntreprise(EStatut statut, String idEntreprise);
+    List<GmMoto> findByStatutAndEntrepriseId(EStatut statut, String idEntreprise);
 }

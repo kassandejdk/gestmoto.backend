@@ -3,9 +3,7 @@ package com.yandoama.gestmoto.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +13,7 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @Table(name = "gm_entreprise")
-public class GmEntreprise extends AbstractInfo{
+public class GmEntreprise extends AbstractInfo {
     @Id
     @Column(name = "id")
     private String id;

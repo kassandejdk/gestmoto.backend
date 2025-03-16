@@ -128,11 +128,13 @@ public class GmServiceMetier {
      * @param id
      * @param dto
      */
-    public void doPutEntreprise(final String id, GmEntrepriseDto dto) {
-        GmEntreprise entreprise = this.mapper.maps(dto);
-        entreprise.setId(id);
-        this.entrepriseRepository.save(entreprise);
+    public GmEntrepriseDto doUpdateEntreprise(final String id, GmEntrepriseDto dto) {
 
+
+       GmEntreprise entreprise = this.mapper.maps(dto);
+        entreprise.setId(id);
+        entreprise = this.entrepriseRepository.save(entreprise);
+        return this.mapper.maps(entreprise);
     }
 
     /**
@@ -154,7 +156,7 @@ public class GmServiceMetier {
      * @return List of GmUserDto
      */
     public List<GmUserDto> doGetUsers(final String idEntreprise) {
-        List<GmUser> users = this.userRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        List<GmUser> users = this.userRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return users.stream().map(mapper::maps).collect(Collectors.toList());
 
     }
@@ -246,7 +248,7 @@ public class GmServiceMetier {
      * @return GmClientDto
      */
     public List<GmClientDto> doGetClients(final String idEntreprise) {
-        List<GmClient> clients = this.clientRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        List<GmClient> clients = this.clientRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return clients.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -313,7 +315,7 @@ public class GmServiceMetier {
      * @return list of employe DTO
      */
     public List<GmEmployeDto> doGetEmployes(final String idEntreprise) {
-        List<GmEmploye> employes = this.employeRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        List<GmEmploye> employes = this.employeRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return employes.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -404,7 +406,7 @@ public class GmServiceMetier {
      * @return a list of DTO
      */
     public List<GmGenreDto> doGetGenres(final String idEntreprise) {
-        List<GmGenre> genres = this.genreRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        List<GmGenre> genres = this.genreRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return genres.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -469,7 +471,7 @@ public class GmServiceMetier {
      * @return List of model
      */
     public List<GmModeleDto> doGetModeles(final String idEntreprise) {
-        List<GmModele> modeles = this.modeleRespository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        List<GmModele> modeles = this.modeleRespository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return modeles.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -520,16 +522,18 @@ public class GmServiceMetier {
      *
      * @param id
      */
-    public void doGetFournisseurById(final String id) {
+    public GmFournisseurDto doGetFournisseurById(final String id) {
         GmFournisseur fournisseur = this.fournisseurRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Le fournisseur n'existe pas."));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Le fournisseur n'existe pas.")
+        );
+        return this.mapper.maps(fournisseur);
     }
 
     /**
      * Get all suppliers.
      */
     public List<GmFournisseurDto> doGetFournisseurs(final String idEntreprise) {
-        List<GmFournisseur> fournisseurs = this.fournisseurRepository.findByStatutAndIdEntreprise(EStatut.ACTIF,
+        List<GmFournisseur> fournisseurs = this.fournisseurRepository.findByStatutAndEntrepriseId(EStatut.ACTIF,
                 idEntreprise);
         return fournisseurs.stream().map(mapper::maps).collect(Collectors.toList());
     }
@@ -606,7 +610,7 @@ public class GmServiceMetier {
      * @return
      */
     public List<GmPosteDto> doGetPostes(final String idEntreprise) {
-        List<GmPoste> postes = this.posteRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        List<GmPoste> postes = this.posteRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return postes.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -681,7 +685,7 @@ public class GmServiceMetier {
      * @return List of motorbike
      */
     public List<GmMotoDto> doGetMotos(final String idEntreprise) {
-        List<GmMoto> motos = this.motoRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        List<GmMoto> motos = this.motoRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return motos.stream().map(mapper::maps).collect(Collectors.toList());
     }
 
@@ -746,7 +750,7 @@ public class GmServiceMetier {
      * @return List of invoice.
      */
     public List<GmFactureDto> doGetFactures(final String idEntreprise) {
-        List<GmFacture> factures = this.factureRepository.findByStatutAndIdEntreprise(EStatut.ACTIF, idEntreprise);
+        List<GmFacture> factures = this.factureRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return factures.stream().map(mapper::maps).collect(Collectors.toList());
     }
 

@@ -1,7 +1,6 @@
 package com.yandoama.gestmoto.repository;
 
 import com.yandoama.gestmoto.entity.GmFournisseur;
-import com.yandoama.gestmoto.entity.GmUser;
 import com.yandoama.gestmoto.entity.enums.EStatut;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,5 +13,5 @@ public interface GmFournisseurRepository extends JpaRepository<GmFournisseur, St
      * @param idEntreprise
      * @return List of Supplier
      */
-    List<GmFournisseur> findByStatutAndIdEntreprise(EStatut eStatut, String idEntreprise);
+    List<GmFournisseur> findByStatutAndEntrepriseId(EStatut eStatut, String idEntreprise);
 }

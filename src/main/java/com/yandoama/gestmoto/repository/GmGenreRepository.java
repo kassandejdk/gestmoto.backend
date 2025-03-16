@@ -35,5 +35,5 @@ public interface GmGenreRepository extends JpaRepository<GmGenre, String> {
      * @param eStatut
      * @return List
      */
-    List<GmGenre> findByStatutAndIdEntreprise(EStatut eStatut, String idEntreprise);
+    List<GmGenre> findByStatutAndEntrepriseId(EStatut eStatut, String idEntreprise);
 }
