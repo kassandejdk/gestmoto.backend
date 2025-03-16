@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 public class GmEntrepriseServiceTest extends AbstractTest {
 
     @Autowired
@@ -24,7 +24,6 @@ public class GmEntrepriseServiceTest extends AbstractTest {
     /**
      * Retourne une liste d'entreprise.
      *
-     * @throws Exception
      */
     @Test
     @DisplayName("Test de récuperation des entreprises.")
@@ -61,6 +60,7 @@ public class GmEntrepriseServiceTest extends AbstractTest {
     @Test
     @DisplayName("Test de modification d'une entreprise.")
     public void testUpdateEntreprise() throws Exception {
+
         String id = "entreprise1";
         GmEntrepriseDto dto = new GmEntrepriseDto();
         dto.setId(id);
@@ -72,6 +72,8 @@ public class GmEntrepriseServiceTest extends AbstractTest {
         dto.setTelephone("+22674415998");
         dto.setLogoUrl("https://logo-modif.url");
 
+        final long sizeBefore = this.entrepriseRepository.findByStatut(EStatut.ACTIF).size();
+
         mvc.perform(put(GmConstants.URLS.BASE_URL + GmConstants.URLS.ENTREPRISE + "/" + id)
                         .content(GmUtils.convertObjectToJsonBytes(dto))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -80,15 +82,15 @@ public class GmEntrepriseServiceTest extends AbstractTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(jsonPath("$.statut").isNotEmpty());
+
+        final long sizeAfter = this.entrepriseRepository.findByStatut(EStatut.ACTIF).size();
+        Assertions.assertEquals(sizeBefore , sizeAfter);
     }
-
-
 
 
     /**
      * Suppression une entreprise.
      *
-     * @throws Exception
      */
     @Test
     @DisplayName("Test de suppression d'une entreprise.")

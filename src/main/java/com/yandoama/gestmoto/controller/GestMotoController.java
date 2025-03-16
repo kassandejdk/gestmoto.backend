@@ -102,7 +102,7 @@ public class GestMotoController {
      *
      * @return a list of motorbike
      */
-    @GetMapping(GmConstants.URLS.MOTO + "entreprise/{idEntreprise}")
+    @GetMapping(GmConstants.URLS.MOTO + "/entreprises/{idEntreprise}")
     public ResponseEntity<List<GmMotoDto>> getMotos(@PathVariable final String idEntreprise) {
         List<GmMotoDto> motos = this.serviceMetier.doGetMotos(idEntreprise);
         return new ResponseEntity<>(motos, HttpStatus.OK);
@@ -139,10 +139,10 @@ public class GestMotoController {
      * @param dto
      * @return a string
      */
-    @PutMapping(GmConstants.URLS.MOTO)
-    public ResponseEntity<String> updateMoto(@PathVariable final String id, @RequestBody final GmMotoDto dto) {
-        this.serviceMetier.doUpdateMoto(id, dto);
-        return new ResponseEntity<>("Moto modifiée avec succès", HttpStatus.OK);
+    @PutMapping(GmConstants.URLS.MOTO + "/{id}")
+    public ResponseEntity<GmMotoDto> updateMoto(@PathVariable final String id, @RequestBody final GmMotoDto dto) {
+        GmMotoDto moto = this.serviceMetier.doUpdateMoto(id, dto);
+        return new ResponseEntity<>(moto, HttpStatus.OK);
     }
 
     /**
@@ -151,7 +151,7 @@ public class GestMotoController {
      * @param id
      * @return String
      */
-    @DeleteMapping(GmConstants.URLS.MOTO)
+    @DeleteMapping(GmConstants.URLS.MOTO + "/{id}")
     public ResponseEntity<String> deleteMoto(@PathVariable final String id) {
         this.serviceMetier.doDeleteMoto(id);
         return new ResponseEntity<>("Moto supprimée avec succès", HttpStatus.OK);
@@ -162,7 +162,7 @@ public class GestMotoController {
      *
      * @return a list of customer
      */
-    @GetMapping(GmConstants.URLS.CLIENT + "/entreprise/{id}")
+    @GetMapping(GmConstants.URLS.CLIENT + "/entreprises/{id}")
     public ResponseEntity<List<GmClientDto>> getClients(final String id) {
         List<GmClientDto> clients = this.serviceMetier.doGetClients(id);
         return new ResponseEntity<>(clients, HttpStatus.OK);
@@ -199,10 +199,10 @@ public class GestMotoController {
      * @param dto
      * @return a string
      */
-    @PutMapping(GmConstants.URLS.CLIENT)
-    public ResponseEntity<String> updateClient(@PathVariable final String id, @RequestBody final GmClientDto dto) {
-        this.serviceMetier.doPutClient(id, dto);
-        return new ResponseEntity<>("Client modifié avec succès", HttpStatus.OK);
+    @PutMapping(GmConstants.URLS.CLIENT + "/{id}")
+    public ResponseEntity<GmClientDto> updateClient(@PathVariable final String id, @RequestBody final GmClientDto dto) {
+        GmClientDto client = this.serviceMetier.doPutClient(id, dto);
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     /**
@@ -211,7 +211,7 @@ public class GestMotoController {
      * @param id
      * @return String
      */
-    @DeleteMapping(GmConstants.URLS.CLIENT)
+    @DeleteMapping(GmConstants.URLS.CLIENT + "/{id}")
     public ResponseEntity<String> deleteClient(@PathVariable final String id) {
         this.serviceMetier.doDeleteClient(id);
         return new ResponseEntity<>("Client supprimé avec succès", HttpStatus.OK);
@@ -223,8 +223,8 @@ public class GestMotoController {
      *
      * @return a list of employe
      */
-    @GetMapping(GmConstants.URLS.EMPLOYE + "entreprise/{id}")
-    public ResponseEntity<List<GmEmployeDto>> getEmployes(final String id) {
+    @GetMapping(GmConstants.URLS.EMPLOYE + "/entreprises/{id}")
+    public ResponseEntity<List<GmEmployeDto>> getEmployes(@PathVariable final String id) {
         List<GmEmployeDto> employes = this.serviceMetier.doGetEmployes(id);
         return new ResponseEntity<>(employes, HttpStatus.OK);
     }
@@ -260,10 +260,10 @@ public class GestMotoController {
      * @param dto
      * @return a string
      */
-    @PutMapping(GmConstants.URLS.EMPLOYE)
-    public ResponseEntity<String> updateEmploye(@PathVariable final String id, @RequestBody final GmEmployeDto dto) {
-        this.serviceMetier.doPutEmploye(id, dto);
-        return new ResponseEntity<>("Employé modifié avec succès", HttpStatus.OK);
+    @PutMapping(GmConstants.URLS.EMPLOYE + "/{id}")
+    public ResponseEntity<GmEmployeDto> updateEmploye(@PathVariable final String id, @RequestBody final GmEmployeDto dto) {
+        GmEmployeDto employe = this.serviceMetier.doUpdateEmploye(id, dto);
+        return new ResponseEntity<>(employe, HttpStatus.OK);
     }
 
     /**
@@ -272,7 +272,7 @@ public class GestMotoController {
      * @param id
      * @return String
      */
-    @DeleteMapping(GmConstants.URLS.EMPLOYE)
+    @DeleteMapping(GmConstants.URLS.EMPLOYE + "/{id}")
     public ResponseEntity<String> deleteEmploye(@PathVariable final String id) {
         this.serviceMetier.doDeleteEmploye(id);
         return new ResponseEntity<>("Employé supprimé avec succès", HttpStatus.OK);
@@ -283,8 +283,8 @@ public class GestMotoController {
      *
      * @return a list of invoice
      */
-    @GetMapping(GmConstants.URLS.FACTURE + "entreprise/{id}")
-    public ResponseEntity<List<GmFactureDto>> getFactures(final String id) {
+    @GetMapping(GmConstants.URLS.FACTURE + "/entreprises/{id}")
+    public ResponseEntity<List<GmFactureDto>> getFactures(@PathVariable final String id) {
         List<GmFactureDto> factures = this.serviceMetier.doGetFactures(id);
         return new ResponseEntity<>(factures, HttpStatus.OK);
     }
@@ -320,7 +320,7 @@ public class GestMotoController {
      * @param dto
      * @return a DTO
      */
-    @PutMapping(GmConstants.URLS.FACTURE)
+    @PutMapping(GmConstants.URLS.FACTURE + "/{id}")
     public ResponseEntity<GmFactureDto> updateFacture(@PathVariable final String id, @RequestBody final GmFactureDto dto) {
         GmFactureDto facture = this.serviceMetier.doUpdateFacture(id, dto);
         return new ResponseEntity<>(facture, HttpStatus.OK);
@@ -332,7 +332,7 @@ public class GestMotoController {
      * @param id
      * @return String
      */
-    @DeleteMapping(GmConstants.URLS.FACTURE)
+    @DeleteMapping(GmConstants.URLS.FACTURE + "/{id}")
     public ResponseEntity<String> deleteFacture(@PathVariable final String id) {
         this.serviceMetier.doDeleteFacture(id);
         return new ResponseEntity<>("Facture supprimée avec succès", HttpStatus.OK);
@@ -343,8 +343,8 @@ public class GestMotoController {
      *
      * @return a list of supplier
      */
-    @GetMapping(GmConstants.URLS.FOURNISSEUR + "entreprise/{id}")
-    public ResponseEntity<List<GmFournisseurDto>> getFournisseurs(final String id) {
+    @GetMapping(GmConstants.URLS.FOURNISSEUR + "/entreprises/{id}")
+    public ResponseEntity<List<GmFournisseurDto>> getFournisseurs(@PathVariable final String id) {
         List<GmFournisseurDto> fournisseurs = this.serviceMetier.doGetFournisseurs(id);
         return new ResponseEntity<>(fournisseurs, HttpStatus.OK);
     }
@@ -380,7 +380,7 @@ public class GestMotoController {
      * @param dto
      * @return a DTO
      */
-    @PutMapping(GmConstants.URLS.FOURNISSEUR)
+    @PutMapping(GmConstants.URLS.FOURNISSEUR + "/{id}")
     public ResponseEntity<GmFournisseurDto> updateFournisseur(@PathVariable final String id,
                                                               @RequestBody final GmFournisseurDto dto) {
         GmFournisseurDto fournisseur = this.serviceMetier.doPutFournisseur(id, dto);
@@ -393,7 +393,7 @@ public class GestMotoController {
      * @param id
      * @return String
      */
-    @DeleteMapping(GmConstants.URLS.FOURNISSEUR)
+    @DeleteMapping(GmConstants.URLS.FOURNISSEUR + "/{id}")
     public ResponseEntity<String> deleteFournisseur(@PathVariable final String id) {
         this.serviceMetier.doDeleteFournisseur(id);
         return new ResponseEntity<>("Fournisseur supprimé avec succès", HttpStatus.OK);
@@ -404,8 +404,8 @@ public class GestMotoController {
      *
      * @return a list of supplier
      */
-    @GetMapping(GmConstants.URLS.GENRE + "entreprise/{id}")
-    public ResponseEntity<List<GmGenreDto>> getGenres(final String id) {
+    @GetMapping(GmConstants.URLS.GENRE + "/entreprises/{id}")
+    public ResponseEntity<List<GmGenreDto>> getGenres(@PathVariable final String id) {
         List<GmGenreDto> genres = this.serviceMetier.doGetGenres(id);
         return new ResponseEntity<>(genres, HttpStatus.OK);
     }
@@ -441,10 +441,10 @@ public class GestMotoController {
      * @param dto
      * @return a DTO
      */
-    @PutMapping(GmConstants.URLS.GENRE)
-    public ResponseEntity<GmGenreDto> updateFournisseur(@PathVariable final String id,
-                                                        @RequestBody final GmGenreDto dto) {
-        GmGenreDto genre = this.serviceMetier.doPutGenre(id, dto);
+    @PutMapping(GmConstants.URLS.GENRE + "/{id}")
+    public ResponseEntity<GmGenreDto> updateGenre(@PathVariable final String id,
+                                                  @RequestBody final GmGenreDto dto) {
+        GmGenreDto genre = this.serviceMetier.doUpdateGenre(id, dto);
         return new ResponseEntity<>(genre, HttpStatus.OK);
     }
 
@@ -454,7 +454,7 @@ public class GestMotoController {
      * @param id
      * @return String
      */
-    @DeleteMapping(GmConstants.URLS.GENRE)
+    @DeleteMapping(GmConstants.URLS.GENRE + "/{id}")
     public ResponseEntity<String> deleteGenre(@PathVariable final String id) {
         this.serviceMetier.doDeleteGenre(id);
         return new ResponseEntity<>("Genre supprimé avec succès", HttpStatus.OK);
@@ -465,8 +465,8 @@ public class GestMotoController {
      *
      * @return a list of model
      */
-    @GetMapping(GmConstants.URLS.MODELE + "entreprise/{id}")
-    public ResponseEntity<List<GmModeleDto>> getModeles(final String id) {
+    @GetMapping(GmConstants.URLS.MODELE + "/entreprises/{id}")
+    public ResponseEntity<List<GmModeleDto>> getModeles(@PathVariable final String id) {
         List<GmModeleDto> modeles = this.serviceMetier.doGetModeles(id);
         return new ResponseEntity<>(modeles, HttpStatus.OK);
     }
@@ -502,10 +502,10 @@ public class GestMotoController {
      * @param dto
      * @return a DTO
      */
-    @PutMapping(GmConstants.URLS.MODELE)
+    @PutMapping(GmConstants.URLS.MODELE + "/{id}")
     public ResponseEntity<GmModeleDto> updateModele(@PathVariable final String id,
                                                     @RequestBody final GmModeleDto dto) {
-        GmModeleDto modele = this.serviceMetier.doPutModele(id, dto);
+        GmModeleDto modele = this.serviceMetier.doUpdateModele(id, dto);
         return new ResponseEntity<>(modele, HttpStatus.OK);
     }
 
@@ -515,7 +515,7 @@ public class GestMotoController {
      * @param id
      * @return String
      */
-    @DeleteMapping(GmConstants.URLS.MODELE)
+    @DeleteMapping(GmConstants.URLS.MODELE + "/{id}")
     public ResponseEntity<String> deleteModele(@PathVariable final String id) {
         this.serviceMetier.doDeleteModele(id);
         return new ResponseEntity<>("Modèle supprimé avec succès", HttpStatus.OK);
@@ -527,8 +527,8 @@ public class GestMotoController {
      *
      * @return a list of work
      */
-    @GetMapping(GmConstants.URLS.POSTE + "entreprise/{id}")
-    public ResponseEntity<List<GmPosteDto>> getPostes(final String id) {
+    @GetMapping(GmConstants.URLS.POSTE + "/entreprises/{id}")
+    public ResponseEntity<List<GmPosteDto>> getPostes(@PathVariable final String id) {
         List<GmPosteDto> postes = this.serviceMetier.doGetPostes(id);
         return new ResponseEntity<>(postes, HttpStatus.OK);
     }
@@ -564,7 +564,7 @@ public class GestMotoController {
      * @param dto
      * @return a DTO
      */
-    @PutMapping(GmConstants.URLS.POSTE)
+    @PutMapping(GmConstants.URLS.POSTE + "/{id}")
     public ResponseEntity<GmPosteDto> updatePoste(@PathVariable final String id,
                                                   @RequestBody final GmPosteDto dto) {
         GmPosteDto poste = this.serviceMetier.doPutPoste(id, dto);
@@ -577,7 +577,7 @@ public class GestMotoController {
      * @param id
      * @return String
      */
-    @DeleteMapping(GmConstants.URLS.POSTE)
+    @DeleteMapping(GmConstants.URLS.POSTE + "/{id}")
     public ResponseEntity<String> deletePoste(@PathVariable final String id) {
         this.serviceMetier.doDeletePoste(id);
         return new ResponseEntity<>("Poste supprimé avec succès", HttpStatus.OK);
@@ -589,8 +589,8 @@ public class GestMotoController {
      *
      * @return a list of user
      */
-    @GetMapping(GmConstants.URLS.USER + "entreprise/{id}")
-    public ResponseEntity<List<GmUserDto>> getUsers(final String id) {
+    @GetMapping(GmConstants.URLS.USER + "/entreprises/{id}")
+    public ResponseEntity<List<GmUserDto>> getUsers(@PathVariable final String id) {
         List<GmUserDto> users = this.serviceMetier.doGetUsers(id);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -626,7 +626,7 @@ public class GestMotoController {
      * @param dto
      * @return a DTO
      */
-    @PutMapping(GmConstants.URLS.USER)
+    @PutMapping(GmConstants.URLS.USER + "/{id}")
     public ResponseEntity<GmUserDto> updateUser(@PathVariable final String id,
                                                 @RequestBody final GmUserDto dto) {
         GmUserDto user = this.serviceMetier.doPutUser(id, dto);
@@ -639,7 +639,7 @@ public class GestMotoController {
      * @param id
      * @return String
      */
-    @DeleteMapping(GmConstants.URLS.USER)
+    @DeleteMapping(GmConstants.URLS.USER + "/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable final String id) {
         this.serviceMetier.doDeleteUser(id);
         return new ResponseEntity<>("Utilisateur supprimé avec succès", HttpStatus.OK);

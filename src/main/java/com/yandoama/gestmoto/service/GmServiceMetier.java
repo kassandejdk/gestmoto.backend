@@ -36,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -64,6 +65,7 @@ public class GmServiceMetier {
      *
      * @return List of enterprises
      */
+    @Transactional(readOnly = true)
     public List<GmEntrepriseDto> doGetEntreprises() {
         List<GmEntreprise> entreprises = this.entrepriseRepository.findByStatut(EStatut.ACTIF);
         return entreprises.stream()
@@ -78,7 +80,7 @@ public class GmServiceMetier {
      * @param id
      * @return a enterprise
      */
-
+    @Transactional(readOnly = true)
     public GmEntrepriseDto doGetEntrepriseById(final String id) {
         GmEntreprise entreprise = this.entrepriseRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Entreprise introuvable.")
@@ -113,6 +115,7 @@ public class GmServiceMetier {
      *
      * @param dto
      */
+    @Transactional
     public GmEntrepriseDto doPostEntreprise(final GmEntrepriseDto dto) {
         this.verifierUniciteEntreprise(dto);
         GmEntreprise entreprise = this.mapper.maps(dto);
@@ -128,10 +131,9 @@ public class GmServiceMetier {
      * @param id
      * @param dto
      */
+    @Transactional
     public GmEntrepriseDto doUpdateEntreprise(final String id, GmEntrepriseDto dto) {
-
-
-       GmEntreprise entreprise = this.mapper.maps(dto);
+        GmEntreprise entreprise = this.mapper.maps(dto);
         entreprise.setId(id);
         entreprise = this.entrepriseRepository.save(entreprise);
         return this.mapper.maps(entreprise);
@@ -142,6 +144,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeleteEnterprise(final String id) {
         this.entrepriseRepository.findById(id).ifPresent((entreprise) -> {
             entreprise.setStatut(EStatut.SUPPRIME);
@@ -155,6 +158,7 @@ public class GmServiceMetier {
      *
      * @return List of GmUserDto
      */
+    @Transactional(readOnly = true)
     public List<GmUserDto> doGetUsers(final String idEntreprise) {
         List<GmUser> users = this.userRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return users.stream().map(mapper::maps).collect(Collectors.toList());
@@ -167,6 +171,7 @@ public class GmServiceMetier {
      * @param id
      * @return a user
      */
+    @Transactional(readOnly = true)
     public GmUserDto doGetUserById(final String id) {
         GmUser user = this.userRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable.")
@@ -193,6 +198,7 @@ public class GmServiceMetier {
      * @param dto
      * @return a user
      */
+    @Transactional
     public GmUserDto doPostUser(final GmUserDto dto) {
         this.checkDuplicateUser(null, dto);
         GmUser user = this.mapper.maps(dto);
@@ -209,6 +215,7 @@ public class GmServiceMetier {
      * @param dto
      * @return a user
      */
+    @Transactional
     public GmUserDto doPutUser(final String id, final GmUserDto dto) {
         this.checkDuplicateUser(id, dto);
         GmUser user = this.mapper.maps(dto);
@@ -222,6 +229,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeleteUser(final String id) {
         this.userRepository.findById(id).ifPresent((entreprise) -> {
             entreprise.setStatut(EStatut.SUPPRIME);
@@ -235,6 +243,7 @@ public class GmServiceMetier {
      * @param id
      * @return GmClientDto
      */
+    @Transactional(readOnly = true)
     public GmClientDto doGetClientById(final String id) {
         GmClient client = this.clientRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Le client n'existe pas"));
@@ -247,6 +256,7 @@ public class GmServiceMetier {
      * @param idEntreprise
      * @return GmClientDto
      */
+    @Transactional(readOnly = true)
     public List<GmClientDto> doGetClients(final String idEntreprise) {
         List<GmClient> clients = this.clientRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return clients.stream().map(mapper::maps).collect(Collectors.toList());
@@ -258,6 +268,7 @@ public class GmServiceMetier {
      * @param dto
      * @return a customer DTO
      */
+    @Transactional
     public GmClientDto doPostClient(final GmClientDto dto) {
         this.checkDuplicateUser(null, dto.getUserDto());
         GmUserDto user = this.doPostUser(dto.getUserDto());
@@ -276,6 +287,7 @@ public class GmServiceMetier {
      * @param dto
      * @return customer DTO.
      */
+    @Transactional
     public GmClientDto doPutClient(final String id, final GmClientDto dto) {
         this.checkDuplicateUser(id, dto.getUserDto());
         this.doPutUser(dto.getIdUtilisateur(), dto.getUserDto());
@@ -290,6 +302,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeleteClient(final String id) {
         this.clientRepository.findById(id).ifPresent((client) -> {
             client.setStatut(EStatut.SUPPRIME);
@@ -303,6 +316,7 @@ public class GmServiceMetier {
      * @param id
      * @return employe DTO
      */
+    @Transactional(readOnly = true)
     public GmEmployeDto doGetEmployeById(final String id) {
         GmEmploye employe = this.employeRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "L'employé n'existe pas."));
@@ -314,6 +328,7 @@ public class GmServiceMetier {
      *
      * @return list of employe DTO
      */
+    @Transactional(readOnly = true)
     public List<GmEmployeDto> doGetEmployes(final String idEntreprise) {
         List<GmEmploye> employes = this.employeRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return employes.stream().map(mapper::maps).collect(Collectors.toList());
@@ -325,9 +340,19 @@ public class GmServiceMetier {
      * @param dto
      * @return employe DTO
      */
+    @Transactional
     public GmEmployeDto doPostEmploye(final GmEmployeDto dto) {
-        this.checkDuplicateUser(null, dto.getUserDto());
-        GmUserDto user = this.doPostUser(dto.getUserDto());
+        GmUserDto user;
+        if(dto.getUserDto()==null){
+            GmUser userEntity = this.userRepository.findById(dto.getIdUtilisateur()).orElseThrow(()->{
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Utilisateur inexistant.");
+            });
+            user = this.mapper.maps(userEntity);
+        }else{
+            this.checkDuplicateUser(null, dto.getUserDto());
+            user = this.doPostUser(dto.getUserDto());
+        }
+
         GmEmploye employe = this.mapper.maps(dto);
         employe.setId(UUID.randomUUID().toString());
         employe.setStatut(EStatut.ACTIF);
@@ -343,7 +368,8 @@ public class GmServiceMetier {
      * @param dto
      * @return employe DTO
      */
-    public GmEmployeDto doPutEmploye(final String id, final GmEmployeDto dto) {
+    @Transactional
+    public GmEmployeDto doUpdateEmploye(final String id, final GmEmployeDto dto) {
         this.checkDuplicateUser(id, dto.getUserDto());
         this.doPutUser(dto.getIdUtilisateur(), dto.getUserDto());
         GmEmploye employe = this.mapper.maps(dto);
@@ -357,6 +383,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeleteEmploye(final String id) {
         this.employeRepository.findById(id).ifPresent((employe) -> {
             employe.setStatut(EStatut.SUPPRIME);
@@ -394,6 +421,7 @@ public class GmServiceMetier {
      * @param id
      * @return a DTO
      */
+    @Transactional(readOnly = true)
     public GmGenreDto doGetGenreById(final String id) {
         GmGenre genre = this.genreRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Le genre n'existe pas."));
@@ -405,6 +433,7 @@ public class GmServiceMetier {
      *
      * @return a list of DTO
      */
+    @Transactional(readOnly = true)
     public List<GmGenreDto> doGetGenres(final String idEntreprise) {
         List<GmGenre> genres = this.genreRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return genres.stream().map(mapper::maps).collect(Collectors.toList());
@@ -416,6 +445,7 @@ public class GmServiceMetier {
      * @param dto
      * @return a DTO
      */
+    @Transactional
     public GmGenreDto doPostGenre(final GmGenreDto dto) {
         this.checkDuplicateGenre(null, dto);
         GmGenre genre = this.mapper.maps(dto);
@@ -432,7 +462,8 @@ public class GmServiceMetier {
      * @param dto
      * @return a DTO
      */
-    public GmGenreDto doPutGenre(final String id, final GmGenreDto dto) {
+    @Transactional
+    public GmGenreDto doUpdateGenre(final String id, final GmGenreDto dto) {
         this.checkDuplicateGenre(id, dto);
         GmGenre genre = this.mapper.maps(dto);
         genre.setId(id);
@@ -445,6 +476,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeleteGenre(final String id) {
         this.genreRepository.findById(id).ifPresent((genre) -> {
             genre.setStatut(EStatut.SUPPRIME);
@@ -458,7 +490,7 @@ public class GmServiceMetier {
      * @param id
      * @return List of model
      */
-
+    @Transactional(readOnly = true)
     public GmModeleDto doGetModeleById(final String id) {
         GmModele modele = this.modeleRespository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Le modèle n'existe pas."));
@@ -470,6 +502,7 @@ public class GmServiceMetier {
      *
      * @return List of model
      */
+    @Transactional(readOnly = true)
     public List<GmModeleDto> doGetModeles(final String idEntreprise) {
         List<GmModele> modeles = this.modeleRespository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return modeles.stream().map(mapper::maps).collect(Collectors.toList());
@@ -481,6 +514,7 @@ public class GmServiceMetier {
      * @param dto
      * @return DTO
      */
+    @Transactional
     public GmModeleDto doPostModele(final GmModeleDto dto) {
         this.checkDuplicateModele(null, dto);
         GmModele modele = this.mapper.maps(dto);
@@ -497,7 +531,8 @@ public class GmServiceMetier {
      * @param dto
      * @return DTO
      */
-    public GmModeleDto doPutModele(final String id, final GmModeleDto dto) {
+    @Transactional
+    public GmModeleDto doUpdateModele(final String id, final GmModeleDto dto) {
         this.checkDuplicateModele(id, dto);
         GmModele modele = this.mapper.maps(dto);
         modele.setId(id);
@@ -510,6 +545,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeleteModele(final String id) {
         this.modeleRespository.findById(id).ifPresent((modele) -> {
             modele.setStatut(EStatut.SUPPRIME);
@@ -522,6 +558,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional(readOnly = true)
     public GmFournisseurDto doGetFournisseurById(final String id) {
         GmFournisseur fournisseur = this.fournisseurRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Le fournisseur n'existe pas.")
@@ -532,6 +569,7 @@ public class GmServiceMetier {
     /**
      * Get all suppliers.
      */
+    @Transactional(readOnly = true)
     public List<GmFournisseurDto> doGetFournisseurs(final String idEntreprise) {
         List<GmFournisseur> fournisseurs = this.fournisseurRepository.findByStatutAndEntrepriseId(EStatut.ACTIF,
                 idEntreprise);
@@ -543,6 +581,7 @@ public class GmServiceMetier {
      *
      * @param dto
      */
+    @Transactional
     public GmFournisseurDto doPostFournisseur(final GmFournisseurDto dto) {
         this.checkDuplicateUser(null, dto.getUser());
         GmUserDto user = this.doPostUser(dto.getUser());
@@ -560,6 +599,7 @@ public class GmServiceMetier {
      * @param id
      * @param dto
      */
+    @Transactional
     public GmFournisseurDto doPutFournisseur(final String id, final GmFournisseurDto dto) {
         this.checkDuplicateUser(id, dto.getUser());
         GmFournisseur fournisseur = this.mapper.maps(dto);
@@ -573,6 +613,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeleteFournisseur(final String id) {
         this.fournisseurRepository.findById(id).ifPresent((fournisseur) -> {
             fournisseur.setStatut(EStatut.SUPPRIME);
@@ -598,6 +639,7 @@ public class GmServiceMetier {
      * @param id
      * @return
      */
+    @Transactional(readOnly = true)
     public GmPosteDto doGetPosteById(final String id) {
         GmPoste poste = this.posteRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Le poste n'existe pas."));
@@ -607,8 +649,9 @@ public class GmServiceMetier {
     /**
      * Get all works.
      *
-     * @return
+     * @return List of DTO
      */
+    @Transactional(readOnly = true)
     public List<GmPosteDto> doGetPostes(final String idEntreprise) {
         List<GmPoste> postes = this.posteRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return postes.stream().map(mapper::maps).collect(Collectors.toList());
@@ -620,6 +663,7 @@ public class GmServiceMetier {
      * @param dto
      * @return
      */
+    @Transactional
     public GmPosteDto doPostPoste(final GmPosteDto dto) {
         GmPoste poste = this.mapper.maps(dto);
         poste.setId(UUID.randomUUID().toString());
@@ -635,7 +679,9 @@ public class GmServiceMetier {
      * @param dto
      * @return
      */
+    @Transactional
     public GmPosteDto doPutPoste(final String id, final GmPosteDto dto) {
+        this.checkDuplicatePoste(id, dto);
         GmPoste poste = this.mapper.maps(dto);
         poste.setId(id);
         poste = this.posteRepository.save(poste);
@@ -647,6 +693,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeletePoste(final String id) {
         this.posteRepository.findById(id).ifPresent((poste) -> {
             poste.setStatut(EStatut.SUPPRIME);
@@ -672,6 +719,7 @@ public class GmServiceMetier {
      * @param id
      * @return GmMotoDto
      */
+    @Transactional(readOnly = true)
     public GmMotoDto doGetMotoById(final String id) {
         GmMoto moto = this.motoRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "La moto n'existe pas."));
@@ -684,6 +732,7 @@ public class GmServiceMetier {
      * @param idEntreprise
      * @return List of motorbike
      */
+    @Transactional(readOnly = true)
     public List<GmMotoDto> doGetMotos(final String idEntreprise) {
         List<GmMoto> motos = this.motoRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return motos.stream().map(mapper::maps).collect(Collectors.toList());
@@ -695,6 +744,7 @@ public class GmServiceMetier {
      * @param dto
      * @return a Moto DTO
      */
+    @Transactional
     public GmMotoDto doPostMoto(final GmMotoDto dto) {
         this.checkDuplicateMoto(null, dto);
         GmMoto moto = this.mapper.maps(dto);
@@ -711,6 +761,7 @@ public class GmServiceMetier {
      * @param dto
      * @return a Moto DTO
      */
+    @Transactional
     public GmMotoDto doUpdateMoto(final String id, final GmMotoDto dto) {
         this.checkDuplicateMoto(id, dto);
         GmMoto moto = this.mapper.maps(dto);
@@ -724,6 +775,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeleteMoto(final String id) {
         this.motoRepository.findById(id).ifPresent((entreprise) -> {
             entreprise.setStatut(EStatut.SUPPRIME);
@@ -737,6 +789,7 @@ public class GmServiceMetier {
      * @param id
      * @return Invoice DTO
      */
+    @Transactional(readOnly = true)
     public GmFactureDto doGetFactureById(final String id) {
         GmFacture facture = this.factureRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cette facture n'existe pas."));
@@ -749,6 +802,7 @@ public class GmServiceMetier {
      * @param idEntreprise
      * @return List of invoice.
      */
+    @Transactional(readOnly = true)
     public List<GmFactureDto> doGetFactures(final String idEntreprise) {
         List<GmFacture> factures = this.factureRepository.findByStatutAndEntrepriseId(EStatut.ACTIF, idEntreprise);
         return factures.stream().map(mapper::maps).collect(Collectors.toList());
@@ -760,6 +814,7 @@ public class GmServiceMetier {
      * @param dto
      * @return Invoice DTO
      */
+    @Transactional
     public GmFactureDto doPostFacture(final GmFactureDto dto) {
         GmFacture facture = this.mapper.maps(dto);
         if (dto.getIdClient() == null) {
@@ -780,6 +835,7 @@ public class GmServiceMetier {
      * @param dto
      * @return Invoice DTO
      */
+    @Transactional
     public GmFactureDto doUpdateFacture(final String id, final GmFactureDto dto) {
         GmFacture facture = this.mapper.maps(dto);
         facture.setId(id);
@@ -792,6 +848,7 @@ public class GmServiceMetier {
      *
      * @param id
      */
+    @Transactional
     public void doDeleteFacture(final String id) {
         this.factureRepository.findById(id).ifPresent((facture) -> {
             facture.setStatut(EStatut.SUPPRIME);
