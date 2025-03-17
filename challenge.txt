@@ -1,0 +1,20 @@
+-- Ci-dessous les challenges/devis rencontres dans le present projet ---
+
+1. Quelle est la difference entre '' et ""
+   Exple: dto.setNumeroSerie("OJY201120") != dto.setNumeroSerie('OJY201120');
+
+   Reponse: En Java, les doubles cotes sont utilises pour definir les String et les simples cotes pour les caracteres.
+
+
+2.Faut-il suivre les instructions de l'IDE
+
+3. Est-ce à dire que si je donne un DTO avec un Id existant, le SGBD sait automatiquement que c'est une modification de cet enregistrement ?
+
+    En fait en Spring Data JPA, la méthode save effectue une mise à jour si l'id existe déjà dans la base de donnée sinon il insère le DTO comme un nouveau enregistrement.
+
+4. @Transactionnal
+    Cette annotation permet d'assuser un principe de la base de donnée qu'est la cohérence des données(cas des entités). En effet,
+    elle permet de s'assurer :
+      cas des méthodes -> Applique les modifications si toutes ses instructions ont été executées avec succès.
+      cas des  entités -> Fait un COMMIT si toutes les instrcutions ont été executées avec succès.
+    C'est donc evident qu'il permettrait d'eviter d'eventuelles conflits au cas ou plusieurs personnes modifierait simultanement la base de donnée.

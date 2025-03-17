@@ -1,19 +1,21 @@
 package com.yandoama.gestmoto.dto;
 
+import com.yandoama.gestmoto.entity.enums.EEtat;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class GmMotoDto {
+public class GmMotoDto extends AbstractInfoDto{
 
     private String id;
 
-    private String libelle;
-
-    private String prix;
+    private Float prix;
 
     private LocalDate date;
 
@@ -23,13 +25,13 @@ public class GmMotoDto {
 
     private String couleur;
 
-    private String etat;
+    private EEtat etat;
 
     private String immatriculation;
 
     private String numeroSerie;
 
-    private String nbrePlace;
+    private Integer nbrePlace;
 
     private String sourceEnergie;
 
@@ -44,8 +46,6 @@ public class GmMotoDto {
     private Float chargeUtile;
 
     private String idGenre;
-
-    private String idMoto;
 
     private String idModele;
 

@@ -1,12 +1,15 @@
 package com.yandoama.gestmoto.dto;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class GmEmployeDto {
+public class GmEmployeDto extends AbstractInfoDto{
 
     private String id;
 
@@ -19,7 +22,7 @@ public class GmEmployeDto {
     private String idPoste;
 
 
-    private String idUser;
+    private String idUtilisateur;
 
     private GmUserDto userDto;
 }

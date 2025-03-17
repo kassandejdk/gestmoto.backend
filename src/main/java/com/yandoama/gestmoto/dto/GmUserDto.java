@@ -2,11 +2,14 @@ package com.yandoama.gestmoto.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class GmUserDto {
+public class GmUserDto extends AbstractInfoDto{
     private String id;
 
     @NotBlank(message="Le nom de famille est obligatoire.")

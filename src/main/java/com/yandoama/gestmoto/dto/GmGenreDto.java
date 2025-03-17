@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class GmGenreDto {
+public class GmGenreDto extends AbstractInfoDto{
 
     private String id;
 

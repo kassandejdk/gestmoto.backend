@@ -7,13 +7,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "gm_fournisseur")
-public class GmFournisseur {
+public class GmFournisseur extends AbstractInfo{
     @Id
     @Column(name = "id")
     private String id;
@@ -23,6 +26,6 @@ public class GmFournisseur {
     private GmEntreprise entreprise;
 
     @ManyToOne
-    @JoinColumn(name = "user")
-    private GmUser user;
+    @JoinColumn(name = "utilisateur")
+    private GmUser utilisateur;
 }

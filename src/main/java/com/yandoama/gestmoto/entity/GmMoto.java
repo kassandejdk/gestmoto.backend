@@ -1,28 +1,31 @@
 package com.yandoama.gestmoto.entity;
 
+import com.yandoama.gestmoto.entity.enums.EEtat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "gm_moto")
-public class GmMoto {
+public class GmMoto extends AbstractInfo{
 
     @Id
     @Column(name = "id")
     private String id;
-
-    @Column(name = "libelle")
-    private String libelle;
 
     @Column(name = "prix")
     private Float prix;
@@ -37,7 +40,8 @@ public class GmMoto {
     private String type;
 
     @Column(name = "etat")
-    private String etat;
+    @Enumerated(EnumType.STRING)
+    private EEtat etat;
 
     @Column(name = "couleur")
     private String couleur;
